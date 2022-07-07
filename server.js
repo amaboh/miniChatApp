@@ -12,7 +12,7 @@ const io = socketio(server);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Run when client connects
-io.on('connection', socket =>{
+io.on('connection', socket =>{ 
     socket.emit("message", "welcome to ChatCord")
 
     // Broadcast when a user connects
@@ -22,7 +22,12 @@ io.on('connection', socket =>{
     socket.on("disconnect", ()=>{
         io.emit("message", "A client has left the chat")
     });
-} )
+
+    // Listen fro the chatMessage event
+    socket.on("chatMessage", msg=>{
+       io.emit("message", msg)
+  });
+});
 
 const PORT = 3000 || process.env.PORT;
 
